@@ -19,7 +19,7 @@ def poll_job(job_id, result_type):
         while True:
             res = requests.get(result_url, headers=headers)
             if res.status_code != 200:
-                st.error("Error polling job")
+                st.error(f"Error polling job: {res.text}")
                 break
             status = res.json()['status']
             if status == 'completed':
@@ -45,7 +45,7 @@ if option == "Text to Image":
             st.write(f"Job ID: {job_id}")
             poll_job(job_id, 'image')
         else:
-            st.error("Failed to start generation")
+            st.error(f"Failed to start generation: {response.status_code} - {response.text}")
 
 elif option == "Text to Video":
     prompt = st.text_input("Enter prompt for video")
@@ -58,19 +58,19 @@ elif option == "Text to Video":
             st.write(f"Job ID: {job_id}")
             poll_job(job_id, 'video')
         else:
-            st.error("Failed to start generation")
+            st.error(f"Failed to start generation: {response.status_code} - {response.text}")
 
 elif option == "Image to Video":
     uploaded_file = st.file_uploader("Upload image", type=["png", "jpg", "jpeg"])
+    prompt = st.text_input("Optional prompt for video")
     if uploaded_file and st.button("Generate Video from Image"):
-        # Encode image to base64 for API (assuming API accepts base64 or URL; adjust if needed)
         image_data = base64.b64encode(uploaded_file.read()).decode()
-        url = "https://platform.higgsfield.ai/v1/models/kling-2-5/generations"  # Example i2v model
-        data = {"params": {"image": f"data:image/png;base64,{image_data}"}}  # Adjust based on API docs
+        url = "https://platform.higgsfield.ai/v1/models/kling-2-5/generations"
+        data = {"params": {"image": f"data:image/png;base64,{image_data}", "prompt": prompt or ""}}
         response = requests.post(url, headers=headers, json=data)
         if response.status_code == 200:
             job_id = response.json()['id']
             st.write(f"Job ID: {job_id}")
             poll_job(job_id, 'video')
         else:
-            st.error("Failed to start generation")
+            st.error(f"Failed to start generation: {response.status_code} - {response.text}")
