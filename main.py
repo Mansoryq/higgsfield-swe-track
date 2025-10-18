@@ -14,7 +14,7 @@ headers = {
 }
 
 def poll_job(job_id, result_type):
-    result_url = f"https://platform.higgsfield.ai/v1/job-sets/{job_id}"
+    result_url = f"https://cloud.higgsfield.ai/v1/job-sets/{job_id}"
     with st.spinner("Generating..."):
         while True:
             res = requests.get(result_url, headers=headers)
@@ -37,7 +37,7 @@ def poll_job(job_id, result_type):
 if option == "Text to Image":
     prompt = st.text_input("Enter prompt for image")
     if st.button("Generate Image"):
-        url = "https://platform.higgsfield.ai/v1/models/nano-banana/generations"
+        url = "https://cloud.higgsfield.ai/v1/models/nano-banana/generations"
         data = {"params": {"prompt": prompt}}
         response = requests.post(url, headers=headers, json=data)
         if response.status_code == 200:
@@ -50,7 +50,7 @@ if option == "Text to Image":
 elif option == "Text to Video":
     prompt = st.text_input("Enter prompt for video")
     if st.button("Generate Video"):
-        url = "https://platform.higgsfield.ai/v1/models/kling-21-master-t2v/generations"
+        url = "https://cloud.higgsfield.ai/v1/models/kling-21-master-t2v/generations"
         data = {"params": {"prompt": prompt}}
         response = requests.post(url, headers=headers, json=data)
         if response.status_code == 200:
@@ -65,7 +65,7 @@ elif option == "Image to Video":
     prompt = st.text_input("Optional prompt for video")
     if uploaded_file and st.button("Generate Video from Image"):
         image_data = base64.b64encode(uploaded_file.read()).decode()
-        url = "https://platform.higgsfield.ai/v1/models/kling-2-5/generations"
+        url = "https://cloud.higgsfield.ai/v1/models/kling-2-5/generations"
         data = {"params": {"image": f"data:image/png;base64,{image_data}", "prompt": prompt or ""}}
         response = requests.post(url, headers=headers, json=data)
         if response.status_code == 200:
