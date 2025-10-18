@@ -40,7 +40,7 @@ def poll_job(job_id, result_type):
 if option == "Text to Image":
     prompt = st.text_input("Enter prompt for image")
     if st.button("Generate Image"):
-        url = "https://cloud.higgsfield.ai/v1/text2image/nano-banana" 
+        url = "https://cloud.higgsfield.ai/v1/text2image/nano-banana"  
         data = {"prompt": prompt}
         response = requests.post(url, headers=headers, json=data)
         if response.status_code == 200:
@@ -50,7 +50,7 @@ if option == "Text to Image":
         else:
             st.error(f"Failed to start generation: {response.status_code} - {response.text}")
 
-
+# === Text to Video ===
 elif option == "Text to Video":
     prompt = st.text_input("Enter prompt for video")
     if st.button("Generate Video"):
